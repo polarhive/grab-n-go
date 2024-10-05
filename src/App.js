@@ -7,7 +7,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1iJ5AMyZGH4vhL9bqr_SBzFY7Y4LmAi4Aa03yJP_yLco/gviz/tq?tqx=out:csv';
+    const sheetUrl = process.env.REACT_APP_GOOGLE_SHEET_URL;
 
     axios
       .get(sheetUrl)
