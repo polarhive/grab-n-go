@@ -1,0 +1,28 @@
+body {
+    background: white;
+}
+.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px);
+    /* Subtracting header height */
+}
+
+.middle .content {
+    text-align: center;
+}
+
+.middle h1 {
+    font-size: 90px;
+    font-style: italic;
+    font-weight: 1000;
+    margin-bottom: 10px;
+}
+
+.middle p {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    margin-top: 0;
+}
