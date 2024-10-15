@@ -2,8 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Heronav from "./hero-nav/hero_nav.js";
 import "./hero.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
+
   return (
     <>
       <Heronav />

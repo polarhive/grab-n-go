@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import App from './App';
 
 import './index.css';
-import App from './App.js';
-import Hero from './heropage/hero.js'
-import SignUp from './signup-page/SignUp.js';
 import Link from './Connect.js'
 
 // import Navbar from './navbar/navbar.js';

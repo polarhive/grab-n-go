@@ -20,17 +20,18 @@
     gap: 10px;
   }
   
-  .s-in {
+  .login {
     border-radius: 10px;
     padding: 8px 38px;
-    background-color: grey;
-    color: black;
+    background-color: black;  
+    color: white;
   }
   
-  .reg {
+  .signup {
     border-radius: 10px;
     padding: 8px 38px;
     background-color: black;
-    color: aliceblue;
+    color: white;
   }
+
   
