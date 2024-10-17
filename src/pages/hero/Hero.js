@@ -1,8 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import Heronav from "./hero-nav/hero_nav.js";
-import "./hero.css";
-import { useNavigate } from "react-router-dom";
+import Heronav from "./Hero_nav.js";
+import "./Hero.css";
 
 export default function Hero() {
 

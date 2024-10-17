@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 
 import './index.css';
-import Link from './Connect.js'
+import Link from './utils/Connect.js'
 
-// import Navbar from './navbar/navbar.js';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Link />
+    <Link />
   </React.StrictMode>
 );
 
