@@ -8,6 +8,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
+  const [phoneNumbers, setPhoneNumbers] = useState([""]); // Array to store phone numbers
 
   useEffect(() => {
     const sheetUrl = process.env.REACT_APP_GOOGLE_SHEET_URL;
@@ -42,16 +43,20 @@ function App() {
     newCart.splice(index, 1);
     setCart(newCart);
   };
+
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+
+  const handleCheckout = () => {
+    const orderData = {
+      cart,
+      phoneNumbers,
+    };
+    const orderDataEncoded = btoa(JSON.stringify(orderData)); // Base64 encode cart and phone numbers
+    window.location.href = `/checkout/#${orderDataEncoded}`; // Redirect to checkout page
+  };
 
   if (loading) return <p>Loading data...</p>;
   if (error) return <p>There was an error fetching the data: {error.message}</p>;
-
-  const handleCheckout = () => {
-    // Redirect to checkout page with cart data in the URL
-    const cartData = btoa(JSON.stringify(cart)); // Base64 encode cart data
-    window.location.href = `/checkout/#${cartData}`; // Redirect to checkout page
-  };
 
   return (
     <Router>
@@ -87,6 +92,29 @@ function App() {
                 ))}
               </ul>
               <p className="mt-2 font-semibold">Total: ₹{totalPrice.toFixed(2)}</p>
+              
+              {/* Phone Numbers Input */}
+              <div className="mt-4">
+                <h3 className="text-lg">Enter Phone Numbers:</h3>
+                {phoneNumbers.map((phone, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    value={phone}
+                    onChange={(e) => {
+                      const newPhones = [...phoneNumbers];
+                      newPhones[index] = e.target.value;
+                      setPhoneNumbers(newPhones);
+                    }}
+                    className="border rounded p-1 m-1 w-full"
+                    placeholder={`Phone number ${index + 1}`}
+                  />
+                ))}
+                <button
+                  className="mt-2 w-full bg-blue-500 text-white py-1 rounded hover:bg-blue-600 transition"
+                  onClick={() => setPhoneNumbers([...phoneNumbers, ""])}>Add Another Phone Number</button>
+              </div>
+              
               <button className="mt-2 w-full bg-blue-500 text-white py-1 rounded hover:bg-blue-600 transition" onClick={handleCheckout}>
                 Checkout
               </button>
