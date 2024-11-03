@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom"; // Updated import
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import Checkout from './Checkout';
 
 function App() {
@@ -9,8 +9,7 @@ function App() {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([{ cart: [], phoneNumber: '' }]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
-  const [nextButtonLabel, setNextButtonLabel] = useState("Next");
-  const navigate = useNavigate(); // Updated to useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const sheetUrl = process.env.REACT_APP_GOOGLE_SHEET_URL;
@@ -54,22 +53,24 @@ function App() {
     setUsers(updatedUsers);
   };
 
-  const handleNext = () => {
-    if (nextButtonLabel === "Next") {
-      setNextButtonLabel("Checkout");
-      setUsers((prevUsers) => {
-        const newUser = { cart: [], phoneNumber: '' };
-        return [...prevUsers, newUser];
-      });
-      setCurrentUserIndex(users.length); // Move to next user
-    } else {
-      handleCheckout();
-    }
-  };
-
   const handleCheckout = () => {
     const orderData = btoa(JSON.stringify(users)); // Encode all users' data
     navigate(`/checkout#${orderData}`); // Redirect to checkout page with encoded data
+  };
+
+  const handleNext = () => {
+    const currentUser = users[currentUserIndex];
+
+    if (!currentUser.phoneNumber) {
+      alert("Please enter a phone number for the current user before proceeding to the next user.");
+      return;
+    }
+
+    // Add a new user object if the current user has a phone number
+    const updatedUsers = [...users];
+    updatedUsers.push({ cart: [], phoneNumber: '' });
+    setUsers(updatedUsers);
+    setCurrentUserIndex(updatedUsers.length - 1); // Move to the next user
   };
 
   const totalPrice = users[currentUserIndex].cart.reduce((total, item) => total + item.price, 0);
@@ -103,7 +104,7 @@ function App() {
       </div>
 
       <div className="cart bg-gray-100 p-6 rounded-lg shadow-lg mt-4 w-80">
-        <h2 className="text-2xl font-semibold">Cart ({users[currentUserIndex].cart.length} items)</h2>
+        <h2 className="text-2xl font-semibold">Cart for User {currentUserIndex + 1} ({users[currentUserIndex].cart.length} items)</h2>
         {users[currentUserIndex].cart.length > 0 ? (
           <>
             <ul className="mt-2">
@@ -117,26 +118,32 @@ function App() {
               ))}
             </ul>
             <p className="mt-2 font-semibold">Total: ₹{totalPrice.toFixed(2)}</p>
-            <div className="mt-4">
-              <input 
-                type="text" 
-                placeholder="Enter Phone Number" 
-                className="border border-gray-300 rounded p-2 w-full" 
-                value={users[currentUserIndex].phoneNumber}
-                onChange={(e) => {
-                  const updatedUsers = [...users];
-                  updatedUsers[currentUserIndex].phoneNumber = e.target.value;
-                  setUsers(updatedUsers);
-                }}
-              />
-              <button className="mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition" onClick={handleNext}>
-                {nextButtonLabel}
-              </button>
-            </div>
           </>
         ) : (
           <p className="mt-2 text-gray-600">Your cart is empty.</p>
         )}
+        <div className="mt-4">
+          <input 
+            type="text" 
+            placeholder="Enter Phone Number" 
+            className="border border-gray-300 rounded p-2 w-full" 
+            value={users[currentUserIndex].phoneNumber}
+            onChange={(e) => {
+              const updatedUsers = [...users];
+              updatedUsers[currentUserIndex].phoneNumber = e.target.value;
+              setUsers(updatedUsers);
+            }}
+          />
+          <button className="mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition" onClick={() => {
+            if (!users[currentUserIndex].phoneNumber) {
+              handleCheckout(); // Proceed to checkout if no phone number
+            } else {
+              handleNext(); // Proceed to next user if phone number is present
+            }
+          }}>
+            {users[currentUserIndex].phoneNumber ? "Next" : "Checkout"}
+          </button>
+        </div>
       </div>
     </div>
   );

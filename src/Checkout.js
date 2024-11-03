@@ -1,48 +1,75 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react'; 
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { QRCodeSVG } from 'qrcode.react';
 
 const Checkout = () => {
   const location = useLocation();
-  const orderData = location.hash.substring(1); // Get the data from URL hash
-  const users = JSON.parse(atob(orderData)); // Decode the Base64 data
+  const hash = location.hash.substring(1); // Get the order data from the URL hash
+  const orderData = JSON.parse(atob(hash)); // Decode the data
+
+  const [selectedUserIndex, setSelectedUserIndex] = useState(null); // Track the selected user
+
+  const handlePickupSelection = (index) => {
+    setSelectedUserIndex(index);
+    alert(`User ${index + 1} is selected to pick up the order.`);
+  };
+
+  const getTotalPrice = (user) => {
+    return user.cart.reduce((total, item) => total + item.price, 0);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 font-inter">
-      <h1 className="text-3xl font-bold mb-4">Checkout</h1>
-      {users.length > 0 ? (
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-xl font-semibold mb-2">Your Orders</h2>
-          {users.map((user, userIndex) => {
-            const totalPrice = user.cart.reduce((total, item) => total + item.price, 0);
-            return (
-              <div key={userIndex} className="mb-4">
-                <h3 className="font-semibold">User {userIndex + 1}: {user.phoneNumber}</h3>
-                <ul className="space-y-2">
-                  {user.cart.map((item, index) => (
-                    <li key={index} className="flex justify-between">
-                      <span>{item.name}</span>
-                      <span>₹{item.price.toFixed(2)}</span>
-                    </li>
-                  ))}
-                </ul>
-                <h4 className="mt-2 font-semibold">Total: ₹{totalPrice.toFixed(2)}</h4>
+    <div className="checkout bg-gray-100 p-6 rounded-lg shadow-lg mt-4 w-80 mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">Checkout</h2>
+      <h3 className="text-lg mb-2">Total Amounts:</h3>
+      <ul>
+        {orderData.map((user, index) => {
+          const totalPrice = getTotalPrice(user);
+          return (
+            <li key={index} className="flex justify-between mb-2 text-sm">
+              <span>User {index + 1}: ₹{totalPrice.toFixed(2)}</span>
+              <button 
+                className="ml-4 text-blue-500" 
+                onClick={() => handlePickupSelection(index)}
+              >
+                Select
+              </button>
+            </li>
+          );
+        })}
+      </ul>
 
-                {/* QR Code Generation */}
-                <div className="mt-4">
-                  <h5 className="font-semibold">QR Code for Payment:</h5>
-                  <QRCodeSVG value={`upi://${user.phoneNumber}@upi?amt=${totalPrice.toFixed(2)}`} />
-                  <p className="mt-1 text-sm">Scan for ₹{totalPrice.toFixed(2)} payment to {user.phoneNumber}</p>
-                </div>
+      {selectedUserIndex !== null && ( // Only show QR codes if a user is selected
+        <>
+          <h3 className="text-lg mt-4">QR Codes:</h3>
+          {orderData.map((user, index) => {
+            if (index === selectedUserIndex) {
+              return null; // Skip generating QR code for the selected user
+            }
+
+            const selectedUser = orderData[selectedUserIndex]; // Get selected user for the pickup
+            if (!selectedUser) {
+              return null; // If selectedUser somehow is undefined, skip QR code generation
+            }
+
+            const selectedUserPhone = selectedUser.phoneNumber; // Get the phone number of person picking up
+            const totalPrice = getTotalPrice(user); // Get total amount for current user
+
+            // Construct the UPI payload
+            const upiPayload = `upi://${selectedUserPhone}@upi?amt=${totalPrice.toFixed(2)}`;
+
+            return (
+              <div key={index} className="mt-4">
+                <h4 className="text-md mb-2">QR Code for User {index + 1}:</h4>
+                <QRCodeSVG 
+                  value={upiPayload} // Generate QR code with UPI payload
+                  size={256}
+                  level={"H"}
+                />
               </div>
             );
           })}
-          <button className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
-            Complete Purchase
-          </button>
-        </div>
-      ) : (
-        <p>Your cart is empty.</p>
+        </>
       )}
     </div>
   );
