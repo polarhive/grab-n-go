@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 import { QRCodeSVG } from 'qrcode.react';
 
 const Checkout = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize useNavigate
   const hash = location.hash.substring(1); // Get the order data from the URL hash
   const orderData = JSON.parse(atob(hash)); // Decode the data
 
@@ -32,6 +33,15 @@ const Checkout = () => {
     setSelectedUserIndex(index);
     setErrorMessage(""); // Clear any previous error messages
     alert(`User ${index + 1} is selected to pick up the order.`);
+  };
+
+  // Handle pickup button click to navigate to Pickup.js
+  const handlePickupClick = () => {
+    if (selectedUserIndex !== null) {
+      navigate('/pickup', {
+        state: { selectedUserIndex, orderData } // Pass the necessary data as state
+      });
+    }
   };
 
   return (
@@ -64,7 +74,7 @@ const Checkout = () => {
           </ul>
         </div>
       )}
-      
+
       {selectedUserIndex !== null && ( // Only show QR codes and totals if a user is selected
         <>
           <h3 className="text-lg mt-4 text-gray-800">QR Codes:</h3>
@@ -107,9 +117,21 @@ const Checkout = () => {
           })}
         </>
       )}
-      
+
       {!hasNonZeroTotal && ( // Display message if all totals are zero
         <p className="text-red-500 text-center mt-4">All users have an empty cart. No QR codes can be generated.</p>
+      )}
+
+      {/* Pickup button */}
+      {selectedUserIndex !== null && (
+        <div className="mt-4">
+          <button 
+            className="w-full bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition"
+            onClick={handlePickupClick}
+          >
+            Proceed to Pickup
+          </button>
+        </div>
       )}
     </div>
   );

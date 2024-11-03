@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import Checkout from './Checkout';
+import Pickup from './Pickup'; // Add this import
 
 function App() {
   const [sheetData, setSheetData] = useState([]);
@@ -123,10 +124,10 @@ function App() {
           <p className="mt-2 text-gray-600">Your cart is empty.</p>
         )}
         <div className="mt-4">
-          <input 
-            type="text" 
-            placeholder="Enter Phone Number" 
-            className="border border-gray-300 rounded p-2 w-full" 
+          <input
+            type="text"
+            placeholder="Enter Phone Number"
+            className="border border-gray-300 rounded p-2 w-full"
             value={users[currentUserIndex].phoneNumber}
             onChange={(e) => {
               const updatedUsers = [...users];
@@ -155,6 +156,7 @@ export default function Wrapper() {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/pickup" element={<Pickup />} /> {/* Add this route */}
       </Routes>
     </Router>
   );
