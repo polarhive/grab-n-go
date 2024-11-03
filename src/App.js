@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"; // Updated import
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"; 
 import axios from "axios";
-import Checkout from './Checkout'; // Import the Checkout component
+import Checkout from './Checkout'; // Ensure this component is created
 
 function App() {
   const [sheetData, setSheetData] = useState([]);
