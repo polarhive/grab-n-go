@@ -61,7 +61,7 @@ const Checkout = () => {
                 totalPrice > 0 && ( // Only show users with non-zero totals
                   <li key={index} className="flex justify-between items-center py-2 border-b border-gray-200">
                     <span className="text-gray-700">User {index + 1} (Total: ₹{totalPrice.toFixed(2)})</span>
-                    <button 
+                    <button
                       className="ml-4 bg-blue-500 text-white rounded px-2 py-1 hover:bg-blue-600 transition"
                       onClick={() => handlePickupSelection(index)}
                     >
@@ -93,13 +93,14 @@ const Checkout = () => {
 
             // Only render QR code if totalPrice is greater than 0
             if (totalPrice > 0) {
-              // Construct the UPI payload
-              const upiPayload = `upi://${selectedUserPhone}@upi?amt=${totalPrice.toFixed(2)}`;
+              // Construct the UPI payload for the QR code
+              // UPI payload format: upi://pay?pa=<VPA>&am=<amount>&cu=<currency>
+              const upiPayload = `upi://pay?pa=${selectedUserPhone}@upi&am=${totalPrice.toFixed(2)}&cu=INR`;
 
               return (
                 <div key={index} className="mt-4 p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm">
                   <h4 className="text-md mb-2 font-semibold">QR Code for User {index + 1}:</h4>
-                  <QRCodeSVG 
+                  <QRCodeSVG
                     value={upiPayload} // Generate QR code with UPI payload
                     size={256}
                     level={"H"}
@@ -125,7 +126,7 @@ const Checkout = () => {
       {/* Pickup button */}
       {selectedUserIndex !== null && (
         <div className="mt-4">
-          <button 
+          <button
             className="w-full bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition"
             onClick={handlePickupClick}
           >
