@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UtensilsCrossed, MenuIcon, X } from "lucide-react";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ export default function Navbar() {
   const [username, setUsername] = useState(null); // User state
   const [loading, setLoading] = useState(true); // Loading state for user fetch
   const [userAuthenticated, setUserAuthenticated] = useState(false); // State to check if user is authenticated
+  const navigate = useNavigate(); // For programmatic navigation
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -17,7 +18,7 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/user`);
+        const response = await axios.get('http://localhost:5000/user'); // Adjust as needed
 
         if (response.data && response.data.name) {
           setUsername(response.data.name); // Set username if it exists
@@ -41,15 +42,33 @@ export default function Navbar() {
   const currentPath = window.location.pathname;
   const isHome = currentPath === "/";
 
-  // Menu items with dynamic last button
+  // Handle logout functionality
+  const handleLogout = async () => {
+    try {
+      console.log("Logging out..."); // Log before sending the logout request
+      await axios.post('http://localhost:5000/api/auth/logout'); // Send logout request
+      console.log("Logout successful"); // Log after successful logout
+
+      setUserAuthenticated(false); // Mark the user as logged out
+      setUsername(null); // Clear the username
+      navigate('/login'); // Redirect to the login page
+    } catch (error) {
+      console.error("Error logging out:", error); // Log if there's an error
+    }
+  };
+
+
+  // Menu items with dynamic last button and Cart for logged-in users
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
+    ...(userAuthenticated ? [{ name: "Cart", path: "/cart" }] : []), // Add Cart if logged in
     {
-      name: isHome ? "Login" : "Logout", // Show Login on homepage
-      path: isHome ? "/login" : "/logout", // Redirect to login or logout
-      className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors"
+      name: userAuthenticated ? `Welcome, ${username}` : "Login", // Display username if authenticated
+      path: userAuthenticated ? "#" : "/login", // If logged in, # for logout; else redirect to login
+      className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
+      onClick: userAuthenticated ? handleLogout : null, // Trigger logout function if authenticated
     },
   ];
 
@@ -70,10 +89,16 @@ export default function Navbar() {
             </Link>
           ))}
 
+
           {/* The login/logout button */}
-          <Link to={menuItems[menuItems.length - 1].path} className={menuItems[menuItems.length - 1].className}>
+          <Link
+            to={menuItems[menuItems.length - 1].path}
+            onClick={menuItems[menuItems.length - 1].onClick} // Add onClick for logout
+            className={menuItems[menuItems.length - 1].className}
+          >
             {menuItems[menuItems.length - 1].name}
           </Link>
+
         </div>
 
         {/* Hamburger Icon */}
@@ -101,8 +126,9 @@ export default function Navbar() {
           {/* The login/logout button */}
           <Link
             to={menuItems[menuItems.length - 1].path}
+            onClick={menuItems[menuItems.length - 1].onClick} // Add onClick for logout
             className={menuItems[menuItems.length - 1].className}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => setMenuOpen(false)} // Close mobile menu
           >
             {menuItems[menuItems.length - 1].name}
           </Link>
