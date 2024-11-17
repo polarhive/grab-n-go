@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Shiny Wipe Animation */
+@keyframes shinyWipe {
+    0% {
+        left: -100%;
+        right: 100%;
+    }
+
+    50% {
+        left: 0;
+        right: 0;
+    }
+
+    100% {
+        left: 100%;
+        right: -100%;
+    }
+}
+
+/* Apply shiny wipe animation */
+.wipe-animation {
+    animation: shinyWipe 1s forwards;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.8));
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    /* Glowing effect */
+    transform: scaleX(1.5);
+    /* Stretch the animation slightly for more dramatic effect */
+}
