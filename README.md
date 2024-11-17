@@ -1,34 +1,41 @@
 # grab-n-go
 
-## Setup your environment
+Try it: [grabngo-dev.vercel.app](https://grabngo-dev.vercel.app)
 
-Create a `.env` file and add the following environment variables
+## Setup Environment
+
+Create an `.env` file and add the following environment variables
 
 ```plain
-REACT_APP_GOOGLE_SHEET_URL=https://docs.google.com/spreadsheets/d/<docid>/gviz/tq?tqx=out:csv
-MONGODB_URI=
-BACKEND_PORT=
+VITE_BACKEND_URL=http://localhost:5000
+VITE_GOOGLE_SHEET_URL=https://docs.google.com/spreadsheets/d/<DOC_ID>/gviz/tq?tqx=out:csv
+MONGODB_URI=mongodb://<ATLAS_URL>/authDB
 ```
 
 ---
 ## Install Dependencies
 
+`pnpm` is faster and more disk space efficient.
+
+```
+npm install -g pnpm 
+```
+
+## Backend
+
+```sh
+cd backend
+```
+
 ```sh
 pnpm i
+node server.js
 ```
 
-## start backend
+## Frontend
 
 ```sh
-# todo
-```
-
-## start frontend
-
-```sh
+pnpm i
 pnpm start
 ```
-
-> visit: http://localhost:3000
-
 

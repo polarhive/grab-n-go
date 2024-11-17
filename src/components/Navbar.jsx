@@ -17,8 +17,7 @@ export default function Navbar() {
   };
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const backendPort = import.meta.env.VITE_BACKEND_PORT;
-  const apiUrl = `${backendUrl}:${backendPort}`;
+  const apiUrl = `${backendUrl}`;
 
   const checkBackendStatus = async () => {
     try {
