@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Cart from './components/Cart';
+import Hero from './pages/Hero';
+import Cart from './pages/Cart';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 import Checkout from './components/Checkout';
-import Pickup from './components/Pickup';
+import Pickup from './pages/Pickup';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Hero />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pickup" element={<Pickup />} />

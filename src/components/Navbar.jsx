@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UtensilsCrossed, X, Menu } from "lucide-react";
+import { UtensilsCrossed, X, Menu, ShoppingCart } from "lucide-react";
 import axios from "axios";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [username, setUsername] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [setLoading] = useState(true);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [backendStatus, setBackendStatus] = useState(true);
   const navigate = useNavigate();
@@ -76,13 +76,27 @@ export default function Navbar() {
     { name: "Home", path: "/" },
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
-    ...(userAuthenticated ? [{ name: "Cart", path: "/cart" }] : []),
-    {
-      name: userAuthenticated ? `Welcome, ${username}` : "Login",
-      path: userAuthenticated ? "#" : "/login",
-      className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
-      onClick: userAuthenticated ? handleLogout : null,
-    },
+
+    ...(userAuthenticated
+      ? [
+        {
+          path: "/cart",
+          name: "Cart",
+        },
+        {
+          name: `Welcome, ${username}`,
+          path: "#",
+          className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
+          onClick: handleLogout,
+        },
+      ]
+      : [
+        {
+          name: "Login",
+          path: "/login",
+          className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
+        },
+      ]),
   ];
 
   const handleLinkClick = (e, item) => {
