@@ -159,8 +159,8 @@ export default function Cart() {
       </div>
 
       {/* Right Pane: Sidebar */}
-      <div className="fixed bottom-0 right-0 w-full sm:w-[300px] bg-green shadow-lg rounded-lg p-4 sm:p-6 max-h-screen overflow-y-auto z-10">
-        <h1 className="text-2xl font-bold text-orange-700 mb-4 text-center animate__animated animate__fadeIn">
+      <div className="fixed bottom-0 right-0 w-full sm:w-[300px] shadow-lg rounded-lg p-4 sm:p-6 max-h-screen overflow-y-auto z-10 backdrop-blur-lg mt-[your-navbar-height]">
+        <h1 className="text-2xl font-bold text-orange-700 mb-4 text-center animate__animated animate__fadeIn drop-shadow-lg rounded-lg p-2">
           Your Cart
         </h1>
 
@@ -247,6 +247,7 @@ export default function Cart() {
           </button>
         )}
       </div>
+
     </div>
   );
 }

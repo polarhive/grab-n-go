@@ -9,14 +9,11 @@ export default function Hero() {
   const popularItems = [
     'Chicken Roll ₹80',
     'Chicken 65 ₹120',
-    'Veg Sandwich ₹60',
     'Cup Noodles ₹50'
   ];
 
   const specialItems = [
     'Paneer Roll ₹90',
-    'Masala Dosa ₹70',
-    'Chilli Chicken ₹140',
     'Vada Pav ₹40'
   ];
 
@@ -27,6 +24,7 @@ export default function Hero() {
       navigate('/login'); // Redirect after 1 second
     }, 1000);
   };
+
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 md:py-24">
@@ -58,10 +56,10 @@ export default function Hero() {
           </button>
         </div>
 
-        {/* Image Section with Wipe Effect */}
+        {/* Image Section */}
         <div className="md:w-1/2 relative">
           <img
-            src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80&w=2070"
+            src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80&w=1090"
             alt="Indian Street Food Spread"
             className="rounded-lg shadow-2xl object-cover w-full h-[300px] sm:h-[400px] md:h-[600px] transition-all duration-500 ease-in-out transform"
           />

@@ -50,8 +50,17 @@ export default function Checkout() {
 
   return (
     <div className="container mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold text-orange-700 mb-6">Checkout</h1>
+      {/* Checkout Header */}
+      <h1 className="text-4xl font-bold text-orange-700 mb-6">Checkout</h1>
 
+      {/* Total Amount Section */}
+      <div className="py-1 border-b border-gray-300 mb-6">
+        <h2 className="text-2xl font-semibold text-orange-800">
+          Total Amount: ₹{totalAmount.toFixed(2)}
+        </h2>
+      </div>
+
+      {/* Payment Section */}
       <div className="bg-orange-50 p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-orange-800 mb-4">Select Payment User</h2>
         <div className="mb-4">
@@ -69,7 +78,6 @@ export default function Checkout() {
           ))}
         </div>
 
-        <h2 className="text-lg font-semibold text-orange-700 mb-4">Total Amount: ₹{totalAmount.toFixed(2)}</h2>
 
         {/* Display details for the selected user */}
         {selectedUserIndex !== null && (

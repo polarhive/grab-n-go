@@ -815,6 +815,17 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  lenis@1.1.16:
+    resolution: {integrity: sha512-bGS8IxJW3x310gTwFylgYU6bGzeVnTALmgyLP8RZ9DFSYC/hN3fi+urCWspr5otljbDAGF4ND2GKCFtemAd45Q==}
+    peerDependencies:
+      react: '>=17.0.0'
+      vue: '>=3.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      vue:
+        optional: true
+
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
@@ -1980,6 +1991,10 @@ snapshots:
   jsesc@3.0.2: {}
 
   json5@2.2.3: {}
+
+  lenis@1.1.16(react@18.3.1):
+    optionalDependencies:
+      react: 18.3.1
 
   lilconfig@2.1.0: {}
 
