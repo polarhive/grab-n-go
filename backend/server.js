@@ -79,7 +79,10 @@ app.post('/api/auth/signup', async (req, res) => {
     const existingUser = await User.findOne({ srn });
     if (existingUser) {
       console.log(`Signup failed: User with SRN ${srn} already exists.`);
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'User already exists' 
+      });
     }
 
     // Hash the password
@@ -97,10 +100,17 @@ app.post('/api/auth/signup', async (req, res) => {
 
     await user.save();
     console.log('New user created successfully:', user);
-    res.status(201).json({ message: 'User created successfully' });
+    res.status(201).json({ 
+      success: true,
+      message: 'User created successfully' 
+    });
   } catch (error) {
     console.error('Error during signup:', error.message);
-    res.status(500).json({ message: 'Error creating user', error: error.message });
+    res.status(500).json({ 
+      success: false,
+      message: 'Error creating user', 
+      error: error.message 
+    });
   }
 });
 
@@ -115,7 +125,10 @@ app.post('/api/auth/login', async (req, res) => {
     const user = await User.findOne({ srn });
     if (!user) {
       console.log(`Login failed: User with SRN ${srn} not found.`);
-      return res.status(400).json({ message: 'User not found' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'User not found' 
+      });
     }
 
     // Validate the password
@@ -123,7 +136,10 @@ app.post('/api/auth/login', async (req, res) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       console.log('Login failed: Invalid password.');
-      return res.status(400).json({ message: 'Invalid password' });
+      return res.status(400).json({ 
+        success: false,
+        message: 'Invalid password' 
+      });
     }
 
     console.log('Login successful for user:', user.name);
@@ -132,6 +148,7 @@ app.post('/api/auth/login', async (req, res) => {
     loggedInUser = { name: user.name, srn: user.srn };
 
     res.json({
+      success: true,
       message: 'Login successful',
       user: {
         name: user.name,
@@ -140,7 +157,11 @@ app.post('/api/auth/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Error during login:', error.message);
-    res.status(500).json({ message: 'Error logging in', error: error.message });
+    res.status(500).json({ 
+      success: false,
+      message: 'Error logging in', 
+      error: error.message 
+    });
   }
 });
 
@@ -195,7 +216,10 @@ app.get('/api/auth/user', (req, res) => {
       name: loggedInUser.name,
     });
   }
-  return res.status(401).json({ success: false, message: 'No user logged in' });
+  return res.status(401).json({ 
+    success: false, 
+    message: 'No user logged in' 
+  });
 });
 
 // Logout
@@ -205,7 +229,10 @@ app.post('/api/auth/logout', (req, res) => {
   // Reset the in-memory logged-in user to null
   loggedInUser = null;
 
-  res.json({ success: true, message: 'Logged out successfully' });
+  res.json({ 
+    success: true, 
+    message: 'Logged out successfully' 
+  });
 });
 
 // Error handling middleware
