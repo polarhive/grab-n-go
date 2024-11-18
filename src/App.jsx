@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Analytics } from "@vercel/analytics/react"
 import Navbar from './components/Navbar';
 import Hero from './pages/Hero';
 import Cart from './pages/Cart';
@@ -10,6 +9,7 @@ import Pickup from './pages/Pickup';
 import LoginPage from './pages/Login';
 import LogoutPage from './pages/Logout';
 import SignupPage from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   return (
@@ -24,10 +24,11 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pickup" element={<Pickup />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />       
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/signup" element={<SignupPage />} />
+
         </Routes>
-        <Analytics />
       </div>
     </Router>
   );

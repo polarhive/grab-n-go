@@ -144,13 +144,55 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// Password Reset Route
+app.post('/api/auth/reset-password', async (req, res) => {
+  console.log('[POST] /api/auth/reset-password - Received request with body:', req.body);
+  try {
+    const { srn, newPassword } = req.body;
+
+    // Find the user by SRN
+    console.log('Looking for user with SRN:', srn);
+    const user = await User.findOne({ srn });
+    if (!user) {
+      console.log(`Password reset failed: User with SRN ${srn} not found.`);
+      return res.status(400).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+
+    // Hash the new password
+    console.log('Hashing new password...');
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password
+    console.log('Updating password for user:', user.name);
+    user.password = hashedPassword;
+    await user.save();
+
+    console.log('Password updated successfully for user:', user.name);
+    res.json({
+      success: true,
+      message: 'Password reset successful'
+    });
+  } catch (error) {
+    console.error('Error during password reset:', error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error resetting password', 
+      error: error.message 
+    });
+  }
+});
+
 // Get logged-in user's information
 app.get('/api/auth/user', (req, res) => {
   console.log('[GET] /api/auth/user - Fetching logged-in user data.');
   if (loggedInUser) {
     return res.json({
       success: true,
-      name: loggedInUser.name, // Expose the `name` of the logged-in user
+      name: loggedInUser.name,
     });
   }
   return res.status(401).json({ success: false, message: 'No user logged in' });
