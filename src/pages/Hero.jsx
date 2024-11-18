@@ -59,7 +59,7 @@ export default function Hero() {
       } else {
         navigate('/login'); // Redirect to login if not logged in
       }
-    }, 1000); // Redirect after 1 second
+    }, 1200); // Redirect after 1 second
   };
 
   return (

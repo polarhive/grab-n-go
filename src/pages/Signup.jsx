@@ -39,7 +39,7 @@ function SignupPage() {
                 setSuccess(response.data.message);
                 setTimeout(() => {
                     navigate('/login');
-                }, 1000);
+                }, 100);
             } else {
                 setError(response.data.message || 'Signup failed');
             }

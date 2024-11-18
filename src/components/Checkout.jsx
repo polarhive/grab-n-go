@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react"; // Import the QRCode component
+import html2canvas from "html2canvas"; // Import html2canvas
 
 export default function Checkout() {
   const location = useLocation();
@@ -8,6 +9,7 @@ export default function Checkout() {
   const [users, setUsers] = useState([]);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
+  const checkoutRef = useRef(null); // Reference to the container to capture
 
   // Fetch order data
   useEffect(() => {
@@ -30,8 +32,8 @@ export default function Checkout() {
   }, [users]);
 
   // Handle user selection to pay for the bill
-  const handlePaymentUserSelect = (index) => {
-    setSelectedUserIndex(index);
+  const handlePaymentUserSelect = (event) => {
+    setSelectedUserIndex(Number(event.target.value)); // Set selected user index from dropdown
   };
 
   // Handle 'Proceed to Pickup' button click
@@ -53,8 +55,20 @@ export default function Checkout() {
     return getUserTotal(users[userIndex]);
   };
 
+  // Function to download the screenshot
+  const downloadScreenshot = () => {
+    if (checkoutRef.current) {
+      html2canvas(checkoutRef.current).then((canvas) => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "checkout-screenshot.png";
+        link.click();
+      });
+    }
+  };
+
   return (
-    <div className="container mx-auto px-6 py-16">
+    <div className="container mx-auto px-6 py-16" ref={checkoutRef}>
       {/* Checkout Header */}
       <h1 className="text-4xl font-bold text-orange-700 mb-6">Checkout</h1>
 
@@ -67,58 +81,72 @@ export default function Checkout() {
 
       {/* Payment Section */}
       <div className="bg-orange-50 p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-orange-800 mb-4">Select Payment User</h2>
+        <h2 className="text-2xl font-semibold text-orange-700 mb-4">Who is going to pickup?</h2>
+
+        {/* Dropdown for selecting the user */}
         <div className="mb-4">
-          {users.map((user, index) => (
-            <div
-              key={index}
-              className={`p-4 border mb-2 rounded cursor-pointer ${selectedUserIndex === index ? "bg-orange-200" : "bg-white"
-                }`}
-              onClick={() => handlePaymentUserSelect(index)}
-            >
-              <p>User {index + 1}</p>
-              <p>Total: ₹{getUserTotal(user).toFixed(2)}</p>
-              <p>{user.phoneNumberOrUpi}</p>
-            </div>
-          ))}
+          <select
+            className="p-2 border rounded-md w-full"
+            value={selectedUserIndex !== null ? selectedUserIndex : ''}
+            onChange={handlePaymentUserSelect}
+          >
+            <option value="" disabled>Select a user</option>
+            {users.map((user, index) => (
+              <option key={index} value={index}>
+                {user.phoneNumberOrUpi}: ₹{getUserTotal(user).toFixed(2)}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Display details for the selected user */}
+        {/* Add horizontal line or break */}
+        <hr className="my-4" />
+
+        {/* Show QR Codes for all users except the selected one */}
         {selectedUserIndex !== null && (
           <div className="mt-6">
-            {/* Show QR Codes for all users except the selected one */}
-            <div className="mt-6">
-              {users.map((user, index) => {
-                // Exclude the selected user from seeing their own QR code
-                if (index !== selectedUserIndex) {
-                  return (
-                    <div key={index} className="mt-4">
-                      <h5 className="text-md font-semibold">QR Code for User {index + 1}</h5>
-                      <QRCodeSVG
-                        value={`upi://pay?pa=${users[selectedUserIndex].phoneNumberOrUpi}&am=${calculateUserOwedAmount(
-                          index
-                        ).toFixed(2)}&cu=INR`}
-                        size={256}
-                        level={"H"}
-                        includeMargin={true}
-                      />
-                    </div>
-                  );
-                }
-                return null; // Don't render anything for the selected user
-              })}
-            </div>
+            {users.map((user, index) => {
+              // Exclude the selected user from seeing their own QR code
+              if (index !== selectedUserIndex) {
+                return (
+                  <div key={index} className="mt-4">
+                    <h5 className="text-md image-center font-semibold">QR Code for: </h5>
+                    {user.phoneNumberOrUpi}: ₹{getUserTotal(user).toFixed(2)}
+
+                    <QRCodeSVG
+                      value={`upi://pay?pa=${users[selectedUserIndex].phoneNumberOrUpi}&am=${calculateUserOwedAmount(
+                        index
+                      ).toFixed(2)}&cu=INR`}
+                      size={256}
+                      level={"H"}
+                      marginSize={4}
+                    />
+                  </div>
+                );
+              }
+              return null; // Don't render anything for the selected user
+            })}
           </div>
         )}
 
         {/* Proceed to Pickup button */}
+
         <button
-          className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          onClick={downloadScreenshot}
+        >
+          Download Screenshot
+
+        </button>
+
+        {/* Screenshot Download Button */}
+        <button
+          className="mt-4 w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 transition"
           onClick={handleProceedToPickup}
         >
           Proceed to Pickup
         </button>
       </div>
-    </div>
+    </div >
   );
 }

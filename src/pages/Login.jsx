@@ -23,7 +23,7 @@ function LoginPage() {
         setTimeout(() => {
           navigate('/'); // Redirect to the home page
           window.location.reload();
-        }, 1000);
+        }, 100);
       } else {
         setError(response.data.message || 'Login failed');
       }
