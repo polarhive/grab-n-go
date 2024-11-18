@@ -4,33 +4,45 @@ Try it: [grabngo-dev.vercel.app](https://grabngo-dev.vercel.app)
 
 ## Setup Environment
 
-Create an `.env` file and add the following environment variables
+Create an `.env` file in the project root and add the following environment variables:
 
-```plain
+```
+# Backend URL for API requests
 VITE_BACKEND_URL=http://localhost:5000
+
+# Food data
 VITE_GOOGLE_SHEET_URL=https://docs.google.com/spreadsheets/d/<DOC_ID>/gviz/tq?tqx=out:csv
-MONGODB_URI=mongodb://<ATLAS_URL>/authDB
+
+# Users DB
+MONGODB_URI=mongodb+srv://username:pass@cluster.mongodb.net
 ```
 
----
 ## Install Dependencies
 
-`pnpm` is faster and more disk space efficient.
+We use `pnpm` for faster and more disk space efficient dependency management.
 
-```
-npm install -g pnpm 
+```sh
+npm install -g pnpm
 pnpm i
 ```
 
-## Backend
+## Run Locally
+
+To run the entire project (both frontend and backend):
 
 ```sh
-node backend/server.js
+pnpm dev
 ```
 
-## Frontend
+You can run the frontend and backend separately if needed:
 
 ```sh
-pnpm start
+pnpm dev:backend
+pnpm dev:frontend
 ```
 
+## Project Overview
+
+- Frontend: Built using React, Vite, and TailwindCSS.
+- Backend: Express.js API with MongoDB for the database.
+- Features: Google Sheets integration and UPI QR code generation.

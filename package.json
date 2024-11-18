@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:frontend": "vite",
+    "dev:backend": "node backend/server.js",
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.3",
     "boring-avatars": "^1.11.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "concurrently": "^9.1.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "vite": "^5.4.2"
