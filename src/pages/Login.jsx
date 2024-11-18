@@ -21,7 +21,8 @@ function LoginPage() {
 
       if (response.data.message === 'Login successful') {
         setTimeout(() => {
-          navigate('/cart'); // Redirect after 1 second
+          navigate('/'); // Redirect to the home page
+          window.location.reload();
         }, 1000);
       } else {
         setError(response.data.message || 'Login failed');

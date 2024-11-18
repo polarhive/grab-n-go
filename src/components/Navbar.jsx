@@ -62,19 +62,6 @@ export default function Navbar() {
     fetchUserDetails();
   }, [backendUrl, backendStatus]);
 
-  const handleLogout = async () => {
-    try {
-      setUserAuthenticated(false);
-      setUsername(null);
-      await axios.post(`${backendUrl}/api/auth/logout`);
-      setTimeout(() => {
-        navigate('/login'); // Redirect after 1 second
-      }, 1000);
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
-
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Contact", path: "/contact" },
@@ -90,7 +77,6 @@ export default function Navbar() {
           name: `Welcome, ${username}`,
           path: "/logout",
           className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
-          onClick: handleLogout,
         },
       ]
       : [
