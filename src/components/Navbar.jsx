@@ -67,6 +67,8 @@ export default function Navbar() {
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
 
+    
+
     ...(userAuthenticated
       ? [
         {

@@ -20,9 +20,10 @@ function LoginPage() {
       });
 
       if (response.data.message === 'Login successful') {
-        setTimeout(() => {
-          navigate('/'); // Redirect to the home page
-          window.location.reload();
+        setTimeout(async () => {
+          navigate('/');  // Go to the homepage
+          await new Promise(resolve => setTimeout(resolve, 100));  // Wait for 100ms
+          navigate('/cart');  // Then go to the cart
         }, 100);
       } else {
         setError(response.data.message || 'Login failed');

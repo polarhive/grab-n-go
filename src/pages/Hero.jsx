@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // For navigation
-import axios from 'axios';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
-  const [setUsername] = useState(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [setLoading] = useState(true);
   const navigate = useNavigate();
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const backendStatus = true; // This should be dynamically controlled based on your backend status
 
   const popularItems = [
     'Chicken Roll ₹80',
@@ -26,38 +19,16 @@ export default function Hero() {
     'Vada Pav ₹40',
   ];
 
-  useEffect(() => {
-    if (!backendStatus) return;
-
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/api/auth/user`);
-        if (response.data?.name) {
-          setUsername(response.data.name);
-          setUserAuthenticated(true);
-        } else {
-          setUsername(null);
-          setUserAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-        setUsername(null);
-        setUserAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserDetails();
-  }, [backendUrl, backendStatus]);
-
   const handleOrderNowClick = () => {
     setIsRedirecting(true);
     setTimeout(() => {
+      // Check for the text "Welcome" in the body of the page
+      const userAuthenticated = document.body.textContent.includes('Welcome,');
+
       if (userAuthenticated) {
-        navigate('/cart'); // Redirect to cart if logged in
+        navigate('/cart'); // Redirect to cart if "Welcome" is found
       } else {
-        navigate('/login'); // Redirect to login if not logged in
+        navigate('/login'); // Redirect to login if "Welcome" is not found
       }
     }, 1200); // Redirect after 1 second
   };
@@ -76,14 +47,12 @@ export default function Hero() {
             From crispy Chicken 65 to flavorful rolls, enjoy your favorite Indian snacks and meals. Fresh, fast, and full of flavor!
           </p>
 
-
-
           {/* Order Now Button (Desktop only) */}
           <button
             onClick={handleOrderNowClick}
             className="bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mt-6 md:block hidden"
           >
-            {userAuthenticated ? 'Go to Cart' : 'Order Now'}
+            Order Now
           </button>
         </div>
 
@@ -105,7 +74,7 @@ export default function Hero() {
           onClick={handleOrderNowClick}
           className="bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
         >
-          {userAuthenticated ? 'Go to Cart' : 'Order Now'}
+          Order Now
         </button>
       </div>
 
