@@ -186,10 +186,12 @@ export default function Cart() {
     );
   }
 
+  
+
   return (
     <div className="flex flex-wrap">
       {/* Left Pane: Food Items List */}
-      <div className={`w-full md:w-2/3 p-4 ${addingUser ? "blur-sm" : ""}`}>
+      <div className={`w-full md:w-2/3 p-4 ${addingUser ? "blur-md" : ""}`}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {sheetData.map((item, idx) => (
             <div key={idx} className="bg-white p-4 rounded-lg shadow-md">
@@ -231,7 +233,6 @@ export default function Cart() {
               disabled={!isValid}
               className={`mt-2 w-full bg-green-600 text-white py-2 px-4 rounded-md ${!isValid && "bg-gray-400"}`}
             >
-              {/* Add IndianRupee Icon */}
               Add Payment Info
             </button>
 

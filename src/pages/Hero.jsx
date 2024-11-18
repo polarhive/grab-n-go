@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
+import axios from 'axios';
 
-export default function Hero({ userAuthenticated }) {
-  const navigate = useNavigate();
+export default function Hero() {
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [setUsername] = useState(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendStatus = true; // This should be dynamically controlled based on your backend status
 
   const popularItems = [
     'Chicken Roll ₹80',
@@ -18,6 +25,31 @@ export default function Hero({ userAuthenticated }) {
     'Chilli Chicken ₹140',
     'Vada Pav ₹40',
   ];
+
+  useEffect(() => {
+    if (!backendStatus) return;
+
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/auth/user`);
+        if (response.data?.name) {
+          setUsername(response.data.name);
+          setUserAuthenticated(true);
+        } else {
+          setUsername(null);
+          setUserAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+        setUsername(null);
+        setUserAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [backendUrl, backendStatus]);
 
   const handleOrderNowClick = () => {
     setIsRedirecting(true);
@@ -44,15 +76,16 @@ export default function Hero({ userAuthenticated }) {
             From crispy Chicken 65 to flavorful rolls, enjoy your favorite Indian snacks and meals. Fresh, fast, and full of flavor!
           </p>
 
+
+
           {/* Order Now Button (Desktop only) */}
           <button
             onClick={handleOrderNowClick}
             className="bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mt-6 md:block hidden"
           >
-            Order Now
+            {userAuthenticated ? 'Go to Cart' : 'Order Now'}
           </button>
         </div>
-
 
         <div className="flex-1 relative">
           <img
@@ -78,7 +111,6 @@ export default function Hero({ userAuthenticated }) {
 
       {/* Text Section - Top Items */}
       <div className="mt-8">
-
         {/* Popular Items */}
         <div className="border rounded-lg shadow-md p-4 bg-white mb-6">
           <h3 className="text-lg font-bold text-gray-700 mb-2">Popular Items</h3>
@@ -99,6 +131,6 @@ export default function Hero({ userAuthenticated }) {
           </ul>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
