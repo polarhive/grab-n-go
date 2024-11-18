@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Avatar from "boring-avatars";
 
 function AboutPage() {
   const teamMembers = [
@@ -48,18 +49,17 @@ function AboutPage() {
         <h2 className="text-2xl font-bold mb-8">Development Team</h2>
         <div className="flex flex-wrap gap-6">
           {teamMembers.map((member) => (
-            <div 
-              key={member.name} 
+            <div
+              key={member.name}
+
               className="flex-1 min-w-[300px] bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-xl"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src="/api/placeholder/400/400"
-                  alt={`${member.name} profile`}
-                  className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
-                />
+
+                <Avatar name={member.name} colors={["#dadd7e", "#ce694d","#fc8d4d", "#fc694d", "#faba32"]} variant="beam" className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100" />
               </div>
+
               <div className="p-6 transform transition-all duration-300 group-hover:translate-y-1">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
                 <p className="text-orange-500 font-medium mb-3">{member.role}</p>
@@ -77,7 +77,7 @@ function AboutPage() {
             you're a developer, designer, or food enthusiast, we'd love to hear
             from you.
           </p>
-          <Link 
+          <Link
             to="/contact"
             className="inline-block bg-white text-orange-600 px-8 py-3 rounded-md font-semibold hover:bg-orange-50 transition-colors"
           >

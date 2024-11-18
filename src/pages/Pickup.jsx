@@ -15,20 +15,17 @@ export default function Pickup() {
     setSelectedUserIndex(selectedUserIndex);
 
     // Combine all items from users' carts into one array
-    let combinedItems = [];
-    users.forEach((user) => {
-      combinedItems = [...combinedItems, ...user.cart];
-    });
+    const combinedItems = users.flatMap((user) => user.cart);
 
     // Group items by name and calculate quantities and total prices
     const grouped = combinedItems.reduce((acc, item) => {
       if (acc[item.name]) {
-        acc[item.name].quantity += 1;
-        acc[item.name].totalPrice += item.price;
+        acc[item.name].quantity += item.quantity;
+        acc[item.name].totalPrice += item.price * item.quantity;
       } else {
         acc[item.name] = {
-          quantity: 1,
-          totalPrice: item.price,
+          quantity: item.quantity,
+          totalPrice: item.price * item.quantity,
         };
       }
       return acc;
@@ -42,7 +39,7 @@ export default function Pickup() {
     }));
 
     // Calculate the total amount
-    const total = Object.values(grouped).reduce((total, item) => total + item.totalPrice, 0);
+    const total = groupedArray.reduce((sum, item) => sum + item.totalPrice, 0);
     setTotalAmount(total);
     setGroupedItems(groupedArray);
   }, [location]);
@@ -53,7 +50,9 @@ export default function Pickup() {
 
   return (
     <div className="container mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold text-orange-700 mb-6">Pickup: User {selectedUserIndex + 1}</h1>
+      <h1 className="text-3xl font-bold text-orange-700 mb-6">
+        Pickup: User {selectedUserIndex + 1}
+      </h1>
 
       <div className="bg-orange-50 p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-orange-800 mb-4">Order Summary</h2>

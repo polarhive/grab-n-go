@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './pages/Hero';
-import Login from './pages/Login';
 import Cart from './pages/Cart';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import Checkout from './components/Checkout';
 import Pickup from './pages/Pickup';
+import LoginPage from './pages/Login';
+import SignupPage from './pages/Signup';
 
 function App() {
   return (
@@ -15,12 +16,14 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Hero />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pickup" element={<Pickup />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+
         </Routes>
       </div>
     </Router>

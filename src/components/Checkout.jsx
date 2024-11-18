@@ -18,7 +18,12 @@ export default function Checkout() {
   // Calculate total for all users
   useEffect(() => {
     const total = users.reduce(
-      (total, user) => total + user.cart.reduce((userTotal, item) => userTotal + item.price, 0),
+      (total, user) =>
+        total +
+        user.cart.reduce(
+          (userTotal, item) => userTotal + item.price * item.quantity,
+          0
+        ),
       0
     );
     setTotalAmount(total);
@@ -40,7 +45,7 @@ export default function Checkout() {
 
   // Get the total for a particular user
   const getUserTotal = (user) => {
-    return user.cart.reduce((total, item) => total + item.price, 0);
+    return user.cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   // Calculate the amount each user owes
@@ -78,11 +83,9 @@ export default function Checkout() {
           ))}
         </div>
 
-
         {/* Display details for the selected user */}
         {selectedUserIndex !== null && (
           <div className="mt-6">
-
             {/* Show QR Codes for all users except the selected one */}
             <div className="mt-6">
               {users.map((user, index) => {
@@ -92,7 +95,9 @@ export default function Checkout() {
                     <div key={index} className="mt-4">
                       <h5 className="text-md font-semibold">QR Code for User {index + 1}</h5>
                       <QRCodeSVG
-                        value={`upi://pay?pa=${users[selectedUserIndex].phoneNumberOrUpi}&am=${calculateUserOwedAmount(index).toFixed(2)}&cu=INR`}
+                        value={`upi://pay?pa=${users[selectedUserIndex].phoneNumberOrUpi}&am=${calculateUserOwedAmount(
+                          index
+                        ).toFixed(2)}&cu=INR`}
                         size={256}
                         level={"H"}
                         includeMargin={true}

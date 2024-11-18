@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UtensilsCrossed, X, Menu, ShoppingCart } from "lucide-react";
+import { UtensilsCrossed, X, Menu } from "lucide-react";
 import axios from "axios";
 
 export default function Navbar() {
@@ -9,6 +9,7 @@ export default function Navbar() {
   const [setLoading] = useState(true);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [backendStatus, setBackendStatus] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -17,32 +18,33 @@ export default function Navbar() {
   };
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const apiUrl = `${backendUrl}`;
 
   const checkBackendStatus = async () => {
     try {
-      await axios.get(`${apiUrl}/api/health`);
+      await axios.get(`${backendUrl}/api`);
       setBackendStatus(true);
       console.log("Backend is online.");
+      setShowNotification(false); // Hide notification if backend is online
     } catch (error) {
       setBackendStatus(false);
       console.log("Backend is offline.");
+      setShowNotification(true); // Show notification if backend is down
     }
   };
 
   useEffect(() => {
     // Initial backend health check
     checkBackendStatus();
-  }, [apiUrl]);
+  }, [backendUrl]);
 
   useEffect(() => {
     if (!backendStatus) return;
 
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/auth/user`);
-        if (response.data?.name) {
-          setUsername(response.data.name);
+        const response = await axios.get(`${backendUrl}/api/auth/user`);
+        if (response.data?.username) {
+          setUsername(response.data.username);
           setUserAuthenticated(true);
         } else {
           setUsername(null);
@@ -58,14 +60,15 @@ export default function Navbar() {
     };
 
     fetchUserDetails();
-  }, [apiUrl, backendStatus]);
+  }, [backendUrl, backendStatus]);
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${apiUrl}/api/auth/logout`);
+      await axios.post(`${backendUrl}/api/auth/logout`);
       setUserAuthenticated(false);
       setUsername(null);
       navigate("/login");
+      window.location.reload();
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -84,7 +87,7 @@ export default function Navbar() {
         },
         {
           name: `Welcome, ${username}`,
-          path: "#",
+          path: "/logout",
           className: "bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors",
           onClick: handleLogout,
         },
@@ -98,19 +101,15 @@ export default function Navbar() {
       ]),
   ];
 
-  const handleLinkClick = (e, item) => {
-    if (!backendStatus) {
-      e.preventDefault();
-      alert("Backend is currently down. Please try again later.");
-      return;
-    }
-    checkBackendStatus(); // Recheck status on navigation
-    if (item.onClick) item.onClick(e); // Call the onClick handler if it exists
-    setMenuOpen(false); // Close the menu
-  };
-
   return (
     <nav className="container mx-auto px-6 py-4">
+      {/* Notification bar for backend status */}
+      {showNotification && (
+        <div className="fixed top-400 left-100 right-400 bg-red-500 text-white py-2 px-4 text-center transition-all transform translate-y-0 opacity-100 animate-slideIn">
+          Backend is down. Please try again later.
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <UtensilsCrossed className="h-8 w-8 text-orange-600" />
@@ -126,20 +125,19 @@ export default function Navbar() {
             <Link
               key={item.name}
               to={item.path}
-              className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              onClick={(e) => handleLinkClick(e, item)}
+              className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
               style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
+              title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
             >
               {item.name}
             </Link>
           ))}
           <Link
             to={menuItems[menuItems.length - 1].path}
-            onClick={(e) => handleLinkClick(e, menuItems[menuItems.length - 1])}
-            className={`${menuItems[menuItems.length - 1].className} ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+            onClick={item => item.onClick && item.onClick()}
+            className={`${menuItems[menuItems.length - 1].className} ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
             style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
+            title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
           >
             {menuItems[menuItems.length - 1].name}
           </Link>
@@ -158,10 +156,9 @@ export default function Navbar() {
             <Link
               key={item.name}
               to={item.path}
-              className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              onClick={(e) => handleLinkClick(e, item)}
+              className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
               style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
+              title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
             >
               {item.name}
             </Link>
