@@ -64,9 +64,9 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${backendUrl}/api/auth/logout`);
       setUserAuthenticated(false);
       setUsername(null);
+      await axios.post(`${backendUrl}/api/auth/logout`);
       setTimeout(() => {
         navigate('/login'); // Redirect after 1 second
       }, 1000);

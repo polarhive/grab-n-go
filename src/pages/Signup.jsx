@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function SignupPage() {
     const [name, setName] = useState('');
@@ -120,7 +120,10 @@ function SignupPage() {
 
                 <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
-                        Already have an account? <a href="/login" className="text-orange-600 hover:text-orange-700">Login</a>
+
+                        <Link to="/login" className="text-orange-600 hover:text-orange-700">
+                            Already have an account?
+                        </Link>
                     </p>
                 </div>
             </div>
