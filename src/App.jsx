@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react"
 import Navbar from './components/Navbar';
 import Hero from './pages/Hero';
 import Cart from './pages/Cart';
@@ -25,8 +26,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/signup" element={<SignupPage />} />
-
         </Routes>
+        <Analytics />
       </div>
     </Router>
   );
