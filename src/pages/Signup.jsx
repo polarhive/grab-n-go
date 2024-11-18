@@ -39,13 +39,13 @@ function SignupPage() {
                 setSuccess(response.data.message);
                 setTimeout(() => {
                     navigate('/login');
-                }, 2000);
+                }, 1000);
             } else {
                 setError(response.data.message || 'Signup failed');
             }
         } catch (error) {
             console.error(error);
-            setError(error);
+            setError('An error occurred. Please try again.');
         }
     };
 

@@ -20,14 +20,15 @@ function LoginPage() {
       });
 
       if (response.data.message === 'Login successful') {
-        navigate('/cart');
-        window.location.reload();
+        setTimeout(() => {
+          navigate('/cart'); // Redirect after 1 second
+        }, 1000);
       } else {
         setError(response.data.message || 'Login failed');
       }
     } catch (error) {
       console.error(error);
-      setError(error);
+      setError('Invalid Credentials. Please try again.');
     }
   };
 

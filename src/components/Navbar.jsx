@@ -67,8 +67,9 @@ export default function Navbar() {
       await axios.post(`${backendUrl}/api/auth/logout`);
       setUserAuthenticated(false);
       setUsername(null);
-      navigate("/login");
-      window.location.reload();
+      setTimeout(() => {
+        navigate('/login'); // Redirect after 1 second
+      }, 1000);
     } catch (error) {
       console.error("Error logging out:", error);
     }
