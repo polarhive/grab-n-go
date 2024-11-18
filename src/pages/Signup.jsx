@@ -45,7 +45,7 @@ function SignupPage() {
             }
         } catch (error) {
             console.error(error);
-            setError('An error occurred. Please try again.');
+            setError(error);
         }
     };
 
