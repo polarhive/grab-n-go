@@ -15,7 +15,7 @@ let users = [
   { name: 'Alice', password: 'secret' }
 ]; // Initial users (this can be replaced with a database)
 
-app.get('/api/health', (req, res) => {
+app.get('/api', (req, res) => {
   console.log("Health check received");
   res.status(200).json({ message: 'Backend is online' });
 });
