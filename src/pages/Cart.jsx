@@ -62,29 +62,40 @@ export default function Cart() {
     }
   };
 
+
   const handleAddUser = () => {
     const regexPhone = /^[0-9]{10}$/; // Phone number validation
-    const regexUpi = /^[a-zA-Z0-9._%+-]+@[a-zA0-9._%+-]+$/;
+    const regexUpi = /^[a-zA-Z0-9._%+-]+@[a-zA0-9._%+-]+$/; // UPI validation
 
-    if (regexPhone.test(phoneNumberOrUpi) || regexUpi.test(phoneNumberOrUpi)) {
-      // Add new user with phone number/UPI ID and empty cart
-      setUsers([
-        ...users,
-        {
-          cart: [], // Reset cart for new user
-          phoneNumberOrUpi: phoneNumberOrUpi,
-        },
-      ]);
-      setPhoneNumberOrUpi(""); // Reset input field after adding user
-      setAddingUser(false); // Allow access to the menu
-      setCurrentUserIndex(users.length); // Move to the next user
-      if (users.length + 1 > 1) {
-        setShowCheckout(true); // Show checkout after 2nd user
-      }
-    } else {
-      alert("Please enter a valid 10-digit phone number or UPI ID.");
+    let finalPhoneNumberOrUpi = phoneNumberOrUpi;
+
+    // If it's a valid phone number, append @upi to it
+    if (regexPhone.test(phoneNumberOrUpi)) {
+      finalPhoneNumberOrUpi = phoneNumberOrUpi + "@upi";
+    } else if (!regexUpi.test(phoneNumberOrUpi)) {
+      // If it's not a valid UPI or phone number, set as invalid
+      alert("Please enter a valid 10-digit phone number or name@upi id.");
+      return;
+    }
+
+    // Add new user with the modified phone number/UPI ID and empty cart
+    setUsers([
+      ...users,
+      {
+        cart: [], // Reset cart for new user
+        phoneNumberOrUpi: finalPhoneNumberOrUpi,
+      },
+    ]);
+
+    setPhoneNumberOrUpi(""); // Reset input field after adding user
+    setAddingUser(false); // Allow access to the menu
+    setCurrentUserIndex(users.length); // Move to the next user
+
+    if (users.length + 1 > 1) {
+      setShowCheckout(true); // Show checkout after 2nd user
     }
   };
+
 
   const addToCart = (item) => {
     setUsers((prevUsers) => {
