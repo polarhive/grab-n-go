@@ -25,7 +25,6 @@ const connectDB = async () => {
   }
 };
 
-
 // User Schema
 const userSchema = new mongoose.Schema(
   {
@@ -58,6 +57,9 @@ app.use(express.json());
 
 // Connect to Database
 connectDB();
+
+// In-memory variable to store logged-in user
+let loggedInUser = null;
 
 // Health Check Route
 app.get('/api', (req, res) => {
@@ -125,6 +127,10 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     console.log('Login successful for user:', user.name);
+
+    // Store logged-in user information in memory
+    loggedInUser = { name: user.name, srn: user.srn };
+
     res.json({
       message: 'Login successful',
       user: {
@@ -138,10 +144,26 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Logout (dummy implementation, as sessions are not used here)
+// Get logged-in user's information
+app.get('/api/auth/user', (req, res) => {
+  console.log('[GET] /api/auth/user - Fetching logged-in user data.');
+  if (loggedInUser) {
+    return res.json({
+      success: true,
+      name: loggedInUser.name, // Expose the `name` of the logged-in user
+    });
+  }
+  return res.status(401).json({ success: false, message: 'No user logged in' });
+});
+
+// Logout
 app.post('/api/auth/logout', (req, res) => {
-  console.log('[POST] /api/auth/logout - User logged out.');
-  res.json({ message: 'Logged out successfully' });
+  console.log('[POST] /api/auth/logout - Logging out user.');
+
+  // Reset the in-memory logged-in user to null
+  loggedInUser = null;
+
+  res.json({ success: true, message: 'Logged out successfully' });
 });
 
 // Error handling middleware

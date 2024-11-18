@@ -43,8 +43,8 @@ export default function Navbar() {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(`${backendUrl}/api/auth/user`);
-        if (response.data?.username) {
-          setUsername(response.data.username);
+        if (response.data?.name) {
+          setUsername(response.data.name);
           setUserAuthenticated(true);
         } else {
           setUsername(null);

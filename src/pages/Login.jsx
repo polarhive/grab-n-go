@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [srn, setSrn] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -15,11 +15,11 @@ function LoginPage() {
 
     try {
       const response = await axios.post(`${backendUrl}/api/auth/login`, {
-        username,
+        srn,
         password,
       });
 
-      if (response.data.success) {
+      if (response.data.message === 'Login successful') {
         navigate('/cart');
         window.location.reload();
       } else {
@@ -42,12 +42,12 @@ function LoginPage() {
 
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
+            <label htmlFor="srn" className="block text-gray-700 mb-2">SRN</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="srn"
+              value={srn}
+              onChange={(e) => setSrn(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />

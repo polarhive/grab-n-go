@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function SignupPage() {
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [srn, setSrn] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
@@ -17,19 +18,19 @@ function SignupPage() {
 
         // Basic validation
         if (password !== confirmPassword) {
-            setError("Passwords do not match");
+            setError('Passwords do not match');
             return;
         }
 
         try {
             const response = await axios.post(`${backendUrl}/api/auth/signup`, {
-                username,
-                password
+                name,
+                srn,
+                password,
             });
 
-            if (response.data.success) {
+            if (response.data.message === 'User created successfully') {
                 setSuccess(response.data.message);
-                // Redirect to login page or auto login
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
@@ -56,12 +57,24 @@ function SignupPage() {
 
                 <form onSubmit={handleSignup}>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
+                        <label htmlFor="name" className="block text-gray-700 mb-2">Name</label>
                         <input
                             type="text"
-                            id="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="srn" className="block text-gray-700 mb-2">SRN</label>
+                        <input
+                            type="text"
+                            id="srn"
+                            value={srn}
+                            onChange={(e) => setSrn(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
                         />
