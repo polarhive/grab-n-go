@@ -12,13 +12,19 @@ function SignupPage() {
     const navigate = useNavigate();
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL; // Assuming you have this in your .env file
+    const srnRegex = /^PES2UG(1[5-9]|2[0-4])(CS|EC|AM)\d{3}$/; // SRN validation regex
 
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        // Basic validation
+        // Basic validations
         if (password !== confirmPassword) {
             setError('Passwords do not match');
+            return;
+        }
+
+        if (!srnRegex.test(srn)) {
+            setError('Invalid SRN format. Please use the correct SRN format.');
             return;
         }
 

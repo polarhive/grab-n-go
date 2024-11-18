@@ -19,23 +19,18 @@ MONGODB_URI=mongodb://<ATLAS_URL>/authDB
 
 ```
 npm install -g pnpm 
+pnpm i
 ```
 
 ## Backend
 
 ```sh
-cd backend
-```
-
-```sh
-pnpm i
-node server.js
+node backend/server.js
 ```
 
 ## Frontend
 
 ```sh
-pnpm i
 pnpm start
 ```
 
