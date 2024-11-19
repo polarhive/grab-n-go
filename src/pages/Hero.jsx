@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ShoppingCart, LogIn } from 'lucide-react';
 
 export default function Hero() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // null for loading state
   const [isRedirecting, setIsRedirecting] = useState(false);
   const navigate = useNavigate();
 
@@ -19,18 +21,57 @@ export default function Hero() {
     'Vada Pav ₹40',
   ];
 
+  // Check user authentication status
+  useEffect(() => {
+    const checkAuthentication = () => {
+      setTimeout(() => {
+        const userAuthenticated = document.body.textContent.includes('Welcome,');
+        setIsAuthenticated(userAuthenticated);
+      }, 500); // Delay to allow page content to load
+    };
+    checkAuthentication();
+  }, []);
+
+  // Handle button click
   const handleOrderNowClick = () => {
     setIsRedirecting(true);
     setTimeout(() => {
-      // Check for the text "Welcome" in the body of the page
-      const userAuthenticated = document.body.textContent.includes('Welcome,');
-
-      if (userAuthenticated) {
-        navigate('/cart'); // Redirect to cart if "Welcome" is found
+      if (isAuthenticated) {
+        navigate('/cart');
       } else {
-        navigate('/login'); // Redirect to login if "Welcome" is not found
+        navigate('/login');
       }
-    }, 1200); // Redirect after 1 second
+    }, 1200); // Add a delay for animation or feedback
+  };
+
+  // Reusable Button Component
+  const OrderButton = ({ className }) => {
+    if (isAuthenticated === null) {
+      // Loading state
+      return (
+        <button
+          className={`flex items-center justify-center bg-gray-400 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold shadow-lg transform ${className}`}
+          disabled
+        >
+          Checking Authentication…
+        </button>
+      );
+    }
+
+    const buttonText = isAuthenticated ? 'Go to Cart' : 'Order Now';
+    const Icon = isAuthenticated ? ShoppingCart : LogIn;
+
+    return (
+      <button
+        onClick={handleOrderNowClick}
+        className={`flex items-center justify-center bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${className}`}
+      >
+        <div className="flex items-center">
+          <Icon className="mr-2" />
+          <span>{buttonText}</span>
+        </div>
+      </button>
+    );
   };
 
   return (
@@ -48,12 +89,7 @@ export default function Hero() {
           </p>
 
           {/* Order Now Button (Desktop only) */}
-          <button
-            onClick={handleOrderNowClick}
-            className="bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mt-6 md:block hidden"
-          >
-            Order Now
-          </button>
+          <OrderButton className="hidden md:block mt-6" />
         </div>
 
         <div className="flex-1 relative">
@@ -70,12 +106,7 @@ export default function Hero() {
 
       {/* Order Now Button (Mobile only) */}
       <div className="text-center md:hidden mt-6">
-        <button
-          onClick={handleOrderNowClick}
-          className="bg-orange-600 text-white px-6 sm:px-8 py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-        >
-          Order Now
-        </button>
+        <OrderButton />
       </div>
 
       {/* Text Section - Top Items */}

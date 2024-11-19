@@ -20,7 +20,7 @@ function Login() {
       });
 
       if (response.data.message === 'Login successful') {  // Check for success message
-        navigate('/cart');
+        navigate('/'); // Redirect to home page
         window.location.reload();
       } else {
         setError(response.data.message || 'Login failed');
@@ -79,7 +79,7 @@ function Login() {
             Don't have an account? <a href="/signup" className="text-orange-600 hover:text-orange-700">Sign up</a>
           </p>
           <p className="text-sm text-gray-600">
-            <a href="/forgotpassword" className="text-orange-600 hover:text-orange-700">Forgot Password?</a>
+            <a href="/forgot-password" className="text-orange-600 hover:text-orange-700">Forgot Password?</a>
           </p>
         </div>
       </div>

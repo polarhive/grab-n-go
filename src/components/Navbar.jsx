@@ -6,19 +6,20 @@ import axios from "axios";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [username, setUsername] = useState(null);
-  const [setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Show loading indicator
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [backendStatus, setBackendStatus] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
     checkBackendStatus(); // Check backend status when toggling the menu
   };
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
+  // Check backend status
   const checkBackendStatus = async () => {
     try {
       await axios.get(`${backendUrl}/api`);
@@ -32,15 +33,11 @@ export default function Navbar() {
     }
   };
 
+  // Fetch user authentication details
   useEffect(() => {
-    // Initial backend health check
-    checkBackendStatus();
-  }, [backendUrl]);
-
-  useEffect(() => {
-    if (!backendStatus) return;
-
     const fetchUserDetails = async () => {
+      if (!backendStatus) return; // Skip if backend is offline
+
       try {
         const response = await axios.get(`${backendUrl}/api/auth/user`);
         if (response.data?.name) {
@@ -55,20 +52,22 @@ export default function Navbar() {
         setUsername(null);
         setUserAuthenticated(false);
       } finally {
-        setLoading(false);
+        setIsLoading(false); // End loading state
       }
     };
 
     fetchUserDetails();
-  }, [backendUrl, backendStatus]);
+  }, [backendStatus, backendUrl]);
+
+  // Initial backend health check
+  useEffect(() => {
+    checkBackendStatus();
+  }, [backendUrl]);
 
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
-
-    
-
     ...(userAuthenticated
       ? [
         {
@@ -110,26 +109,34 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center space-x-8">
-          {menuItems.slice(0, -1).map((item) => (
+          {/* Loading state while checking authentication */}
+          {isLoading ? (
+            <span className="text-gray-500 italic">Checking authentication...</span>
+          ) : (
+            menuItems.slice(0, -1).map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
+                style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
+                title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
+              >
+                {item.name}
+              </Link>
+            ))
+          )}
+
+          {/* Show login or username button */}
+          {!isLoading && (
             <Link
-              key={item.name}
-              to={item.path}
-              className={`text-gray-600 hover:text-orange-600 transition-colors ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
+              to={menuItems[menuItems.length - 1].path}
+              className={`${menuItems[menuItems.length - 1].className} ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
               style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
               title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
             >
-              {item.name}
+              {menuItems[menuItems.length - 1].name}
             </Link>
-          ))}
-          <Link
-            to={menuItems[menuItems.length - 1].path}
-            onClick={item => item.onClick && item.onClick()}
-            className={`${menuItems[menuItems.length - 1].className} ${!backendStatus ? "opacity-50 cursor-not-allowed" : ""}`}
-            style={{ pointerEvents: !backendStatus ? "none" : "auto" }}
-            title={!backendStatus ? "Backend is currently down. Please try again later." : ""}
-          >
-            {menuItems[menuItems.length - 1].name}
-          </Link>
+          )}
         </div>
 
         <div className="md:hidden flex items-center">
