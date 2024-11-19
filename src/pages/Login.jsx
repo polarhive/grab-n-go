@@ -50,7 +50,7 @@ function Login() {
               onChange={(e) => setSrn(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
-              placeholder="PES2UG23CS399"
+              placeholder="PES2UG23CS100"
             />
           </div>
 
@@ -60,6 +60,7 @@ function Login() {
               type="password"
               id="password"
               value={password}
+              placeholder="********"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required

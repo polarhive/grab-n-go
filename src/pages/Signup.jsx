@@ -71,6 +71,7 @@ function SignupPage() {
                             onChange={(e) => setName(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
+                            placeholder="Your Name"
                         />
                     </div>
 
@@ -83,6 +84,7 @@ function SignupPage() {
                             onChange={(e) => setSrn(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
+                            placeholder="PES2UG23CS100"
                         />
                     </div>
 
@@ -95,6 +97,9 @@ function SignupPage() {
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
+                            placeholder="Use a strong 8 digit password"
+                            minLength="8"
+
                         />
                     </div>
 
@@ -107,6 +112,8 @@ function SignupPage() {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
+                            minLength="8"
+                            placeholder="Repeat it"
                         />
                     </div>
 
