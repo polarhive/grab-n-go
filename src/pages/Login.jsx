@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
   const [srn, setSrn] = useState('');  // Changed from username to srn
@@ -73,13 +73,23 @@ function Login() {
             Login
           </button>
         </form>
-
         <div className="mt-4 text-center space-y-2">
           <p className="text-sm text-gray-600">
-            Don't have an account? <a href="/signup" className="text-orange-600 hover:text-orange-700">Sign up</a>
+            Don't have an account?{' '}
+            <Link
+              to="/signup"
+              className="text-orange-600 hover:text-orange-700 transition-colors"
+            >
+              Sign up
+            </Link>
           </p>
           <p className="text-sm text-gray-600">
-            <a href="/forgot-password" className="text-orange-600 hover:text-orange-700">Forgot Password?</a>
+            <Link
+              to="/forgotpassword"
+              className="text-orange-600 hover:text-orange-700 transition-colors"
+            >
+              Forgot Password?
+            </Link>
           </p>
         </div>
       </div>

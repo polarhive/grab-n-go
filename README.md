@@ -2,6 +2,7 @@
 
 Try it: [grabngo-dev.vercel.app](https://grabngo-dev.vercel.app)
 
+
 ## Setup Environment
 
 Create an `.env` file in the project root and add the following environment variables:
@@ -46,3 +47,20 @@ pnpm dev:frontend
 - Frontend: Built using React, Vite, and TailwindCSS.
 - Backend: Express.js API with MongoDB for the database.
 - Features: Google Sheets integration and UPI QR code generation.
+
+---
+## Credits
+
+[![license: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+UE23CS241A: Web Tech mini-project
+
+```
+Copyright © 2024: <grab-n-go authors>
+Licensed under the MIT
+
+PES2UG23CS368 Nathan Matthew Paul
+PES2UG23CS390 Nilay Srivastava
+PES2UG23CS394 Nisschay Khandelwal
+```
+

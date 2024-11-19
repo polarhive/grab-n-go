@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function ForgotPassword() {
   const [srn, setSrn] = useState('');
@@ -66,7 +66,7 @@ function ForgotPassword() {
               onChange={(e) => setSrn(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
-              placeholder="PES1UG21CS123"
+              placeholder="PES2UG21CS123"
             />
           </div>
 
@@ -106,7 +106,13 @@ function ForgotPassword() {
 
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Remember your password? <a href="/login" className="text-orange-600 hover:text-orange-700">Login</a>
+            Remember your password?{' '}
+            <Link
+              to="/login"
+              className="text-orange-600 hover:text-orange-700 transition-colors"
+            >
+              Login
+            </Link>
           </p>
         </div>
       </div>
